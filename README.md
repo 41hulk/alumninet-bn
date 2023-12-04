@@ -1,73 +1,100 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Alumni Network
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+"An AUCA tool to manage the university alumni Network"
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Introduction
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+## Index
 
-```bash
-$ npm install
-```
+* [Usage](#usage)
+    - [Installation](#installation)
+    - [Run app in Docker](#docker)
+    - [Documentation](#documentation)
+* [Development](#development)
+    - [Pre-requisites](#pre-requisites)
+    - [File Structure](#structure)
+    - [Testing](#testing)
+* [community](#community)
+    - [Contribution](#contribution)
+    - [Branches](#branches)
+* [License](#license)
 
-## Running the app
+## Usage  <a name="usage"></a>
 
-```bash
-# development
-$ npm run start
+### Installation <a name="installation"></a>
 
-# watch mode
-$ npm run start:dev
+* install [Docker](https://www.docker.com) and docker-compose if you want to run the app in docker. <span style="color: blue">In some cases you can skip this.</span>
+* clone the project ```git clone ```;
+* go into the root directory of the cloned project
+* run ```npm install``` in order to install dependencies which are listed in ```package.json```
+* create ```.env``` file into the root directory 
+* copy and paste the content ```.env.example``` into .env, set the appropriate PORT and other listed environment variables
+* run ```npm run dev ``` for development
+* you will be able to access the project on your local machine using url: ```127.0.0.1:$port```
 
-# production mode
-$ npm run start:prod
-```
 
-## Test
+#### Run app in Docker <a name="docker"></a>
+To run the app in [Docker](https://www.docker.com) You should first install docker as instructed in the installations needed.
 
-```bash
-# unit tests
-$ npm run test
+* run npm run docker-compose up : To build and start app in Docker
 
-# e2e tests
-$ npm run test:e2e
+``` Other instructions about docker will be mentioned soon ```
 
-# test coverage
-$ npm run test:cov
-```
+### Documentation <a name="documentation"></a>
 
-## Support
+Navigate to ```127.0.0.1:$port/api/docs``` on your browser. The swagger documentations on the page will give you an overview of the app functionalities.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Development <a name="development"></a>
 
-## Stay in touch
+* For development, pull the project to your own repo
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Pre-Requisites <a name="pre-requisites"></a>
+
+* Nodejs version 18.x
+* Docker
+* Postgres
+* Sequelize ORM
+* Mocha
+
+### File Structure <a name="structure"> </a>
+
+* ```src``` : Out of setup all the other new files are supposed to be added inside this folder. 
+
+* ```gitignore:```This file is used to exclude files or directories from being tracked by Git. This is particularly useful for sensitive or irrelevant files that don't need to be uploaded to a remote repository.
+* ```eslintrc.json:```This file is used to configure the ESLint code linter, which helps to catch and fix errors and inconsistencies in the JavaScript code.
+* ```babelrc:``` This file is used to configure Babel, a tool that transpiles modern JavaScript code into an older syntax that can be understood by older browsers and environments.
+* ```env.example:```This file is a template for creating a .env file, which is used to store environment variables for this project. This allows sensitive information such as API keys and database passwords to be kept secure.
+* ```sequelizerc:```This file is used to configure Sequelize, an ORM (Object-Relational Mapping) library for Node.js, which helps to interact with the database.
+* ```houndciignore:```This file is used to exclude files or directories from being analyzed by HoundCI, a code review tool.
+* ```hound.yml:```This file is used to configure HoundCI, specifying which tools and configurations should be used during code review.
+* ```github:```This folder may contain files related to integrating with Github, such as Github Actions configuration files
+* ```Logs:```This folder is used to store log files generated by the application, which can help diagnose errors or other issues.
+* ```database:```This folder may contain files related to the database schema or migrations, such as SQL files or migration scripts.
+* ```views:``` This folder is used to store the HTML templates used to generate the user interface of the application. These templates may be rendered by a server-side rendering engine or by the client-side JavaScript code.
+* ```package.json:``` This file is used by package managers like ```npm and yarn``` to store information about this project. In other words this json file stores metadata.
+* ```README.md: ``` this file is updated often and it stores the description about this project.
+
+### Testing <a name="testing"></a>
+
+The developer needs to run tests to ensure that the setup was correctly implemented.
+To test the endpoints run ```npm run test``` in the terminal
+
+## Community <a name="community"></a>
+
+### Contribution <a name="contribution"> </a>
+
+
+## Deployment <a name="deployment"> </a>
+
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+Details about this can be found in the [LICENCE](https://github.com/atlp-rwanda/e-comm-team-techsmith-bn/blob/develop/LICENSE) file of this project
+
+
+
+
+
+
