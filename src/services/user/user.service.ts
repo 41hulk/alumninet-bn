@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
+import { sign } from 'jsonwebtoken';
+import { LoginDto } from 'src/dto/userDto.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -18,11 +21,18 @@ export class UserService {
     telephone: string,
     role: string,
   ) {
+    const user = await this.user.findOne({ where: { email: email } });
+
+    if (user) {
+      return { data: null, error: 'User already exists' };
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const create_user = await this.user.create({
       first_name: first_name,
       last_name: last_name,
       email: email,
-      password: password,
+      password: hashedPassword,
       telephone: telephone,
       role: role,
     });
@@ -35,6 +45,42 @@ export class UserService {
       .catch((error) => {
         return { data: null, error: error.toString() };
       });
+  }
+
+  async loginUser(email: string, password: string): Promise<UserEntity> {
+    const user = await this.user.findOne({ where: { email: email } });
+    if (!user) {
+      throw new HttpException(
+        'User not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
+      throw new HttpException(
+        'Incorrect password',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    return user;
+  }
+  buildUserResponse(user: UserEntity): any {
+    return {
+      email: user.email,
+      token: this.generateJwtToken(user),
+    };
+  }
+
+  generateJwtToken(user: UserEntity): string {
+    return sign(
+      {
+        email: user.email,
+      },
+      'JWT_SECRET',
+    );
   }
 
   async getAllUsers() {

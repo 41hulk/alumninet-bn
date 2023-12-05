@@ -35,11 +35,12 @@ export class UpdateUserRoleDto {
 }
 
 export class LoginDto {
-  @ApiProperty({ description: 'Username' })
+  @IsNotEmpty()
+  @ApiProperty({ required: true })
   @IsEmail()
   email: string;
 
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({ required: true })
   password: string;
 }
