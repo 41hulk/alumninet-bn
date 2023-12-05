@@ -12,6 +12,7 @@ import { UserEntity } from './entities/user.entity';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
+      ssl: { rejectUnauthorized: false },
       url: process.env.DATABASE_URL,
       host: process.env.DB_HOST,
       port: parseInt(process.env.PORT),
@@ -19,8 +20,6 @@ import { UserEntity } from './entities/user.entity';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-      logging: false,
     }),
     TypeOrmModule.forFeature([UserEntity]),
   ],
