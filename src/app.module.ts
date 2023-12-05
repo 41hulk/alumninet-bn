@@ -9,7 +9,7 @@ import { UserEntity } from './entities/user.entity';
 import { AuthService } from './services/auth/auth.service';
 import { AuthController } from './controllers/auth/auth.controller';
 import { AuthMiddleware } from './middlewares/auth.middleware';
-
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     ConfigModule.forRoot(),
