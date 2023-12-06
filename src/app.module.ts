@@ -16,7 +16,7 @@ const ENV = process.env.NODE_ENV;
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-
+      ssl: { rejectUnauthorized: false },
       url: process.env.DATABASE_URL,
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT),
