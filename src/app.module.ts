@@ -7,14 +7,16 @@ import { UserController } from './controllers/user/user.controller';
 import { UserService } from './services/user/user.service';
 import { UserEntity } from './entities/user.entity';
 import { AuthMiddleware } from './middlewares/auth.middleware';
+
+const ENV = process.env.NODE_ENV;
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development.local', '.env.development'],
+      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      ssl: { rejectUnauthorized: false },
+
       url: process.env.DATABASE_URL,
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT),
