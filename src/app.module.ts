@@ -16,7 +16,6 @@ const ENV = process.env.NODE_ENV;
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      ssl: { rejectUnauthorized: false },
       url: process.env.DATABASE_URL,
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT),
@@ -24,6 +23,7 @@ const ENV = process.env.NODE_ENV;
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE,
       autoLoadEntities: true,
+      // ssl: { rejectUnauthorized: false },
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
     TypeOrmModule.forFeature([UserEntity]),
