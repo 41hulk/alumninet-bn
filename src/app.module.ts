@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './controllers/user/user.controller';
 import { UserService } from './services/user/user.service';
@@ -14,17 +14,21 @@ const ENV = process.env.NODE_ENV;
     ConfigModule.forRoot({
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL,
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE,
-      autoLoadEntities: true,
-      // ssl: { rejectUnauthorized: false },
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get('DATABASE_URL'),
+        host: configService.get('DB_HOST'),
+        port: parseInt(configService.get('DB_PORT')),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PASSWORD'),
+        database: configService.get('DATABASE'),
+        autoLoadEntities: true,
+        synchronize: true,
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      }),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([UserEntity]),
   ],
