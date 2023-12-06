@@ -1,16 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Param,
-  Post,
-  Request,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, LoginDto } from 'src/dto/userDto.dto';
-import { ExpressRequest } from 'src/middlewares/auth.middleware';
+
 import { UserService } from 'src/services/user/user.service';
 
 @ApiTags('User')
@@ -37,10 +28,7 @@ export class UserController {
   }
 
   @Get()
-  async getAllUsers(@Request() request: ExpressRequest) {
-    if (!request.user) {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    }
+  async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 

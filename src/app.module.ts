@@ -6,13 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './controllers/user/user.controller';
 import { UserService } from './services/user/user.service';
 import { UserEntity } from './entities/user.entity';
-import { AuthService } from './services/auth/auth.service';
-import { AuthController } from './controllers/auth/auth.controller';
 import { AuthMiddleware } from './middlewares/auth.middleware';
-import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development.local', '.env.development'],
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       ssl: { rejectUnauthorized: false },
@@ -22,12 +21,13 @@ import { JwtModule } from '@nestjs/jwt';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE,
+      autoLoadEntities: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
     TypeOrmModule.forFeature([UserEntity]),
   ],
-  controllers: [AppController, UserController, AuthController],
-  providers: [AppService, UserService, AuthService],
+  controllers: [AppController, UserController],
+  providers: [AppService, UserService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
