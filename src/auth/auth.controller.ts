@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  Request,
   UseGuards,
   UnauthorizedException,
   Get,
@@ -10,6 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RegisterDto } from './dto/registerDto.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -31,6 +31,7 @@ export class AuthController {
     return this.authService.register(email, password);
   }
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get('allUsers')
   async getProfile() {
     return await this.authService.getAll();
