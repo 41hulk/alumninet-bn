@@ -10,7 +10,7 @@ export class AuthService {
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (user && (await bcrypt.compare(pass, user.password))) {
-      const { password, ...result } = user;
+      const { ...result } = user;
       return await result;
     }
     return await null;
@@ -19,6 +19,7 @@ export class AuthService {
   async login(user: any) {
     const payload = { email: user.email, sub: user.id };
     return {
+      data: user,
       access_token: await this.jwtService.sign(payload),
     };
   }
