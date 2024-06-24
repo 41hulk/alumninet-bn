@@ -76,39 +76,4 @@ describe('AuthController', () => {
       );
     });
   });
-
-  // describe('register', () => {
-  //   it('should create and return a new user', async () => {
-  //     const mockUser = {
-  //       id: 1,
-  //       email: 'test@example.com',
-  //       password: 'hashedPassword',
-  //     };
-  //     jest.spyOn(authService, 'register').mockResolvedValue(mockUser);
-
-  //     const body: RegisterDto = {
-  //       email: 'test@example.com',
-  //       password: 'password',
-  //     };
-  //     const result = await controller.register(body);
-
-  //     expect(result).toEqual(mockUser);
-  //     expect(authService.register).toHaveBeenCalledWith(
-  //       'test@example.com',
-  //       'password',
-  //     );
-  //   });
-  // });
-
-  // describe('getProfile', () => {
-  //   it('should return an array of users', async () => {
-  //     const mockUsers = [{ email: 'test@example.com' }];
-  //     jest.spyOn(authService, 'getAll').mockResolvedValue(mockUsers);
-
-  //     const result = await controller.getProfile();
-
-  //     expect(result).toEqual(mockUsers);
-  //     expect(authService.getAll).toHaveBeenCalled();
-  //   });
-  // });
 });
