@@ -1,5 +1,4 @@
-name: Deploy to Heroku
-
+name: deploy to heroku
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -18,7 +17,7 @@ jobs:
           node-version: 14
 
       - name: Install dependencies
-        run: npm ci
+        run: npm Install
 
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
