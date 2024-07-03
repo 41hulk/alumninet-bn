@@ -11,7 +11,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Alumni Network API')
-    .setDescription('An Alumni Network API for AUCA')
+    .setDescription('connect - engage - empower')
     .setVersion('0.1')
     .build();
   const document = SwaggerModule.createDocument(app, config);
@@ -20,3 +20,5 @@ async function bootstrap() {
   await app.listen(process.env.PORT);
 }
 bootstrap();
+
+//TODO: deploy this to digital ocean
