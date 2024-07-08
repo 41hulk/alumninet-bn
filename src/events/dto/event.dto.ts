@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 import { Dto } from 'src/lib/dto/Dto';
-import { ProfileDto } from '../userDto/profile.dto';
+import { ProfileDto } from '../../auth/dto/profile.dto';
 
 export class EventDto extends Dto<EventDto> {
   @ApiProperty()

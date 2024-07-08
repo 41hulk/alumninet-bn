@@ -3,10 +3,11 @@ import {
   NotFoundException,
   PreconditionFailedException,
 } from '@nestjs/common';
-import { CreateEventDto } from 'src/dto/Eventdto/createEventDto.dto';
-import { EventDto } from 'src/dto/Eventdto/event.dto';
-import { ProfileDto } from 'src/dto/userDto/profile.dto';
+
+import { EventDto } from 'src/events/dto/event.dto';
+import { ProfileDto } from 'src/auth/dto/profile.dto';
 import { PrismaService } from 'src/prisma.service';
+import { CreateEventDto } from './dto/createEventDto.dto';
 
 @Injectable()
 export class EventsService {

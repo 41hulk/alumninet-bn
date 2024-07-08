@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma.service';
-import { LoginDto } from 'src/dto/userDto/loginDto.dto';
+import { LoginDto } from 'src/auth/dto/loginDto.dto';
 
 describe('AuthController', () => {
   let controller: AuthController;

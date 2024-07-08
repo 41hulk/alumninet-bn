@@ -3,10 +3,11 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ReqUser, ReqUserType } from 'src/auth/util/user.decorator';
-import { CreateEventDto } from 'src/dto/Eventdto/createEventDto.dto';
-import { EventDto } from 'src/dto/Eventdto/event.dto';
 
-import { EventsService } from 'src/services/events/events.service';
+import { EventDto } from 'src/events/dto/event.dto';
+
+import { CreateEventDto } from './dto/createEventDto.dto';
+import { EventsService } from './events.service';
 
 @Controller('events')
 export class EventsController {
@@ -19,7 +20,6 @@ export class EventsController {
     @Body() createEventDto: CreateEventDto,
     @ReqUser() user: ReqUserType,
   ): Promise<EventDto> {
-    console.log(user);
     return this.eventsService.createEvent(user.id, createEventDto);
   }
 
