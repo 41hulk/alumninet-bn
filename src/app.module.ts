@@ -11,6 +11,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import { EventsModule } from './events/events.module';
 import { EventsController } from './events/events.controller';
 import { EventsService } from './events/events.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -25,6 +26,8 @@ import { EventsService } from './events/events.service';
     AuthModule,
 
     EventsModule,
+
+    UsersModule,
   ],
   controllers: [AppController, EventsController],
   providers: [AppService, JwtStrategy, PrismaService, EventsService],
