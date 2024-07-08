@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { RegisterDto } from '../dto/userDto/registerDto.dto';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma.service';
+import { LoginDto } from 'src/dto/userDto/loginDto.dto';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -44,7 +44,7 @@ describe('AuthController', () => {
       jest.spyOn(authService, 'validateUser').mockResolvedValue(mockUser);
       jest.spyOn(authService, 'login').mockResolvedValue(loginResult);
 
-      const body: RegisterDto = {
+      const body: LoginDto = {
         email: 'test@example.com',
         password: 'password',
       };
@@ -61,7 +61,7 @@ describe('AuthController', () => {
     it('should throw UnauthorizedException if login fails', async () => {
       jest.spyOn(authService, 'validateUser').mockResolvedValue(null);
 
-      const body: RegisterDto = {
+      const body: LoginDto = {
         email: 'test@example.com',
         password: 'password',
       };

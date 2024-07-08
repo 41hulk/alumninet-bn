@@ -18,6 +18,10 @@ export class EventDto extends Dto<EventDto> {
 
   @ApiProperty()
   @IsNotEmpty()
+  date: Date;
+
+  @ApiProperty()
+  @IsNotEmpty()
   location: string;
 
   @ApiProperty()

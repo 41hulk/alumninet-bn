@@ -16,7 +16,7 @@ export class EventsService {
     const events = await this.prisma.event.findMany({
       where: { delete_at: null },
       include: { user: true },
-      orderBy: { date: 'asc' },
+      orderBy: { createdAt: 'desc' },
     });
 
     return events.map((event) => {
@@ -24,6 +24,7 @@ export class EventsService {
         id: event.id,
         title: event.title,
         description: event.description,
+        date: event.date,
         location: event.location,
         user: new ProfileDto({
           id: event.user.id,
@@ -65,6 +66,7 @@ export class EventsService {
       title: newEvent.title,
       description: newEvent.description,
       location: newEvent.location,
+      date: newEvent.date,
       user: new ProfileDto({
         id: newEvent.user.id,
         email: newEvent.user.email,
@@ -74,7 +76,7 @@ export class EventsService {
   }
 }
 
-//TODO:Create a way to update and delete events
+//TODO: Create a way to update and delete events
 //TODO: In getAll include reservations
 //TODO: Create a way to get a single event
 //TODO: Create a way to get all events for a user
