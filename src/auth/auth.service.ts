@@ -45,6 +45,9 @@ export class AuthService {
   }
 
   async getAll() {
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({
+      where: { deleted_at: null },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 }

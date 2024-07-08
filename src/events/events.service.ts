@@ -8,6 +8,8 @@ import { EventDto } from 'src/events/dto/event.dto';
 import { ProfileDto } from 'src/auth/dto/profile.dto';
 import { PrismaService } from 'src/prisma.service';
 import { CreateEventDto } from './dto/createEventDto.dto';
+import { ReserveEventDto } from './dto/reserveDto.dto';
+import { ReservationDto } from './dto/reservation.dto';
 
 @Injectable()
 export class EventsService {
@@ -16,7 +18,7 @@ export class EventsService {
   async getEvents() {
     const events = await this.prisma.event.findMany({
       where: { delete_at: null },
-      include: { user: true },
+      include: { user: true, reservations: true },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -34,6 +36,80 @@ export class EventsService {
         }),
       });
     });
+  }
+
+  async reserveEvent(userId: string, data: ReserveEventDto) {
+    const { eventId } = data;
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!userId) {
+      throw new PreconditionFailedException('Missing user id');
+    }
+    if (!user.isActive) {
+      throw new PreconditionFailedException('User is not active');
+    }
+    const event = await this.prisma.event.findUnique({
+      where: { id: eventId },
+    });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    const reservation = await this.prisma.reservation.create({
+      data: {
+        event: { connect: { id: eventId } },
+        user: { connect: { id: userId } },
+      },
+      include: { user: true, event: true },
+    });
+    if (!reservation) {
+      throw new NotFoundException('Could not reserve the event');
+    }
+
+    return reservation;
+    // return new reservation.map((reservation) => {
+    //   return new ReservationDto({
+    //     id: reservation.id,
+    //     event: new EventDto({
+    //       id: event.id,
+    //       title: event.title,
+    //       description: event.description,
+    //       date: event.date,
+    //       location: event.location,
+    //       user: new ProfileDto({
+    //         id: reservation.user.id,
+    //         email: reservation.user.email,
+    //         username: reservation.user.username,
+    //       }),
+    //     }),
+    //     user: new ProfileDto({
+    //       id: user.id,
+    //       email: user.email,
+    //       username: user.username,
+    //     }),
+    //     createdAt: reservation.createdAt,
+    //   });
+    // });
+
+    // return new ReservationDto({
+    //   id: reservation.id,
+    //   event: new EventDto({
+    //     id: event.id,
+    //     title: event.title,
+    //     description: event.description,
+    //     date: event.date,
+    //     location: event.location,
+    //     user: new ProfileDto({
+    //       id: ,
+    //       email: user.email,
+    //       username: user.username,
+    //     }),
+    //   }),
+    //   user: new ProfileDto({
+    //     id: user.id,
+    //     email: user.email,
+    //     username: user.username,
+    //   }),
+    //   createdAt: reservation.createdAt,
+    // });
   }
 
   async createEvent(userId: string, data: CreateEventDto) {
