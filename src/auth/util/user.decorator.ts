@@ -6,12 +6,9 @@ import {
 import { Request } from 'express';
 
 export interface ReqUserType {
-  userId: {
-    id: number;
-  };
+  id: string;
   email: string;
 }
-
 export const ReqUser = (required = true) =>
   createParamDecorator((_data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest<Request>();

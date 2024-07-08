@@ -1,8 +1,8 @@
 import { Dto } from 'src/lib/dto/Dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from '@nestjs/class-validator';
+import { IsString } from '@nestjs/class-validator';
 
-export class RegisterDto extends Dto<RegisterDto> {
+export class LoginDto extends Dto<LoginDto> {
   @ApiProperty()
   @IsString()
   email: string;
@@ -10,8 +10,4 @@ export class RegisterDto extends Dto<RegisterDto> {
   @ApiProperty()
   @IsString()
   password: string;
-
-  @ApiProperty()
-  @IsBoolean()
-  isAdmin: boolean;
 }

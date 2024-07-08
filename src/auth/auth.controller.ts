@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RegisterDto } from '../dto/userDto/registerDto.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { LoginDto } from 'src/dto/userDto/loginDto.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -17,7 +18,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() body: RegisterDto) {
+  async login(@Body() body: LoginDto) {
     const { email, password } = body;
     const user = await this.authService.validateUser(email, password);
     if (!user) {
@@ -28,8 +29,8 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: RegisterDto) {
-    const { email, password } = body;
-    return this.authService.register(email, password);
+    const { email, password, isAdmin } = body;
+    return this.authService.register(email, password, isAdmin);
   }
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
