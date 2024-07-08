@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { EventsService } from './services/events/events.service';
+import { EventsController } from './controllers/events/events.controller';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
 
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, JwtStrategy, PrismaService],
+  controllers: [AppController, EventsController],
+  providers: [AppService, JwtStrategy, PrismaService, EventsService],
 })
 export class AppModule {}
