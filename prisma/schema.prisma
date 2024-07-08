@@ -31,8 +31,9 @@ model Event {
 
   user User @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  delete_at DateTime?
 
   reservations Reservation[]
 }

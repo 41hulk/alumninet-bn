@@ -1,5 +1,11 @@
-import { Injectable, PreconditionFailedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  PreconditionFailedException,
+} from '@nestjs/common';
 import { CreateEventDto } from 'src/dto/Eventdto/createEventDto.dto';
+import { EventDto } from 'src/dto/Eventdto/event.dto';
+import { ProfileDto } from 'src/dto/userDto/profile.dto';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -7,7 +13,25 @@ export class EventsService {
   constructor(private prisma: PrismaService) {}
 
   async getEvents() {
-    return await this.prisma.event.findMany();
+    const events = await this.prisma.event.findMany({
+      where: { delete_at: null },
+      include: { user: true },
+      orderBy: { date: 'asc' },
+    });
+
+    return events.map((event) => {
+      return new EventDto({
+        id: event.id,
+        title: event.title,
+        description: event.description,
+        location: event.location,
+        user: new ProfileDto({
+          id: event.user.id,
+          email: event.user.email,
+          username: event.user.username,
+        }),
+      });
+    });
   }
 
   async createEvent(userId: string, data: CreateEventDto) {
@@ -22,7 +46,7 @@ export class EventsService {
     if (!user.isAdmin) {
       throw new PreconditionFailedException('The user is not an admin');
     }
-    return await this.prisma.event.create({
+    const newEvent = await this.prisma.event.create({
       data: {
         title,
         description,
@@ -32,5 +56,26 @@ export class EventsService {
       },
       include: { user: true, reservations: true },
     });
+    if (!newEvent) {
+      throw new NotFoundException('Could not create a new event');
+    }
+
+    return new EventDto({
+      id: newEvent.id,
+      title: newEvent.title,
+      description: newEvent.description,
+      location: newEvent.location,
+      user: new ProfileDto({
+        id: newEvent.user.id,
+        email: newEvent.user.email,
+        username: newEvent.user.username,
+      }),
+    });
   }
 }
+
+//TODO:Create a way to update and delete events
+//TODO: In getAll include reservations
+//TODO: Create a way to get a single event
+//TODO: Create a way to get all events for a user
+//TODO: Create a way to get all events for a location
