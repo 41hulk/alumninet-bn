@@ -9,8 +9,6 @@ import { ProfileDto } from '../auth/dto/profile.dto';
 import { PrismaService } from '../prisma.service';
 import { CreateEventDto } from './dto/createEventDto.dto';
 import { ReserveEventDto } from './dto/reserveDto.dto';
-import { ReservationDto } from './dto/reservation.dto';
-import { AllReservationUserDTO } from 'src/users/dto/allReservation';
 
 @Injectable()
 export class EventsService {
