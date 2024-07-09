@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ReqUser, ReqUserType } from 'src/auth/util/user.decorator';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ReqUser, ReqUserType } from '../auth/util/user.decorator';
 
 import { EventDto } from 'src/events/dto/event.dto';
 

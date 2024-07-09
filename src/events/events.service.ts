@@ -4,9 +4,9 @@ import {
   PreconditionFailedException,
 } from '@nestjs/common';
 
-import { EventDto } from 'src/events/dto/event.dto';
-import { ProfileDto } from 'src/auth/dto/profile.dto';
-import { PrismaService } from 'src/prisma.service';
+import { EventDto } from '../events/dto/event.dto';
+import { ProfileDto } from '../auth/dto/profile.dto';
+import { PrismaService } from '../prisma.service';
 import { CreateEventDto } from './dto/createEventDto.dto';
 import { ReserveEventDto } from './dto/reserveDto.dto';
 import { ReservationDto } from './dto/reservation.dto';

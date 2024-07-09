@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { Dto } from 'src/lib/dto/Dto';
+import { Dto } from '../../lib/dto/Dto';
 import { ProfileDto } from '../../auth/dto/profile.dto';
 import { ReservationDto } from './reservation.dto';
 
