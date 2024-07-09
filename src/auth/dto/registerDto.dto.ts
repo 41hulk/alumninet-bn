@@ -1,7 +1,7 @@
-import { Dto } from 'src/lib/dto/Dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsString } from '@nestjs/class-validator';
 
+import { Dto } from '../../lib/dto/Dto';
 export class RegisterDto extends Dto<RegisterDto> {
   @ApiProperty()
   @IsString()
