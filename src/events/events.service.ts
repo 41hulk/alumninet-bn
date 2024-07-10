@@ -64,51 +64,6 @@ export class EventsService {
     }
 
     return reservation;
-    // return new reservation.map((reservation) => {
-    //   return new ReservationDto({
-    //     id: reservation.id,
-    //     event: new EventDto({
-    //       id: event.id,
-    //       title: event.title,
-    //       description: event.description,
-    //       date: event.date,
-    //       location: event.location,
-    //       user: new ProfileDto({
-    //         id: reservation.user.id,
-    //         email: reservation.user.email,
-    //         username: reservation.user.username,
-    //       }),
-    //     }),
-    //     user: new ProfileDto({
-    //       id: user.id,
-    //       email: user.email,
-    //       username: user.username,
-    //     }),
-    //     createdAt: reservation.createdAt,
-    //   });
-    // });
-
-    // return new ReservationDto({
-    //   id: reservation.id,
-    //   event: new EventDto({
-    //     id: event.id,
-    //     title: event.title,
-    //     description: event.description,
-    //     date: event.date,
-    //     location: event.location,
-    //     user: new ProfileDto({
-    //       id: ,
-    //       email: user.email,
-    //       username: user.username,
-    //     }),
-    //   }),
-    //   user: new ProfileDto({
-    //     id: user.id,
-    //     email: user.email,
-    //     username: user.username,
-    //   }),
-    //   createdAt: reservation.createdAt,
-    // });
   }
 
   async createEvent(userId: string, data: CreateEventDto) {
@@ -153,7 +108,5 @@ export class EventsService {
 }
 
 //TODO: Create a way to update and delete events
-//TODO: In getAll include reservations
-//TODO: Create a way to get a single event
-//TODO: Create a way to get all events for a user
-//TODO: Create a way to get all events for a location
+//TODO: Create a way to cancel reservations
+//TODO: create a way to soft delete everything
