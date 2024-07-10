@@ -11,6 +11,7 @@ import { EventsModule } from './events/events.module';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { AuthService } from './auth/auth.service';
+import { UsersService } from './users/users.service';
 
 describe('AppModule', () => {
   let appModule: TestingModule;
@@ -26,9 +27,16 @@ describe('AppModule', () => {
         AuthModule,
         EventsModule,
         UsersModule,
+        UsersModule,
       ],
       controllers: [AppController],
-      providers: [AppService, JwtStrategy, PrismaService, EventsService],
+      providers: [
+        AppService,
+        JwtStrategy,
+        PrismaService,
+        EventsService,
+        UsersService,
+      ],
     }).compile();
 
     appModule = module;
