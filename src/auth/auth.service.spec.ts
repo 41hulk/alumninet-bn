@@ -82,12 +82,17 @@ describe('AuthService', () => {
       prismaService.user.create = jest.fn().mockResolvedValue(mockUser);
       jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword');
 
-      const result = await service.register('test@example.com', 'password');
+      const result = await service.register(
+        'test@example.com',
+        'password',
+        false,
+      );
       expect(result).toEqual(mockUser);
       expect(prismaService.user.create).toHaveBeenCalledWith({
         data: {
           email: 'test@example.com',
           password: 'hashedPassword',
+          isAdmin: false,
         },
       });
     });

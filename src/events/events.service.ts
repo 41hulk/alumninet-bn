@@ -4,10 +4,11 @@ import {
   PreconditionFailedException,
 } from '@nestjs/common';
 
-import { EventDto } from 'src/events/dto/event.dto';
-import { ProfileDto } from 'src/auth/dto/profile.dto';
-import { PrismaService } from 'src/prisma.service';
+import { EventDto } from '../events/dto/event.dto';
+import { ProfileDto } from '../auth/dto/profile.dto';
+import { PrismaService } from '../prisma.service';
 import { CreateEventDto } from './dto/createEventDto.dto';
+import { ReserveEventDto } from './dto/reserveDto.dto';
 
 @Injectable()
 export class EventsService {
@@ -16,7 +17,7 @@ export class EventsService {
   async getEvents() {
     const events = await this.prisma.event.findMany({
       where: { delete_at: null },
-      include: { user: true },
+      include: { user: true, reservations: true },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -34,6 +35,35 @@ export class EventsService {
         }),
       });
     });
+  }
+
+  async reserveEvent(userId: string, data: ReserveEventDto) {
+    const { eventId } = data;
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!userId) {
+      throw new PreconditionFailedException('Missing user id');
+    }
+    if (!user.isActive) {
+      throw new PreconditionFailedException('User is not active');
+    }
+    const event = await this.prisma.event.findUnique({
+      where: { id: eventId },
+    });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    const reservation = await this.prisma.reservation.create({
+      data: {
+        event: { connect: { id: eventId } },
+        user: { connect: { id: userId } },
+      },
+      include: { user: true, event: true },
+    });
+    if (!reservation) {
+      throw new NotFoundException('Could not reserve the event');
+    }
+
+    return reservation;
   }
 
   async createEvent(userId: string, data: CreateEventDto) {
@@ -78,7 +108,5 @@ export class EventsService {
 }
 
 //TODO: Create a way to update and delete events
-//TODO: In getAll include reservations
-//TODO: Create a way to get a single event
-//TODO: Create a way to get all events for a user
-//TODO: Create a way to get all events for a location
+//TODO: Create a way to cancel reservations
+//TODO: create a way to soft delete everything

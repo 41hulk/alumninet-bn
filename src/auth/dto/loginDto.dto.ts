@@ -1,4 +1,4 @@
-import { Dto } from 'src/lib/dto/Dto';
+import { Dto } from '../../lib/dto/Dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from '@nestjs/class-validator';
 
