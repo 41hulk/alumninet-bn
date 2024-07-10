@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from './app.module';
+
 import { AppService } from './app.service';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { PrismaService } from './prisma.service';
 import { EventsService } from './events/events.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
 import { UsersModule } from './users/users.module';
@@ -36,6 +36,8 @@ describe('AppModule', () => {
         PrismaService,
         EventsService,
         UsersService,
+        JwtService,
+        AuthService,
       ],
     }).compile();
 
