@@ -22,14 +22,20 @@ export class CampaignService {
   }
 
   async getCampaignById(campaignId: string) {
-    const campaign = await this.prisma.campaign.findUnique({
-      where: { id: campaignId },
-      include: { user: true },
-    });
-    if (!campaign) {
-      throw new PreconditionFailedException('Campaign not found');
+    try {
+      const campaign = await this.prisma.campaign.findUnique({
+        where: { id: campaignId },
+        include: { user: true },
+      });
+      if (!campaign) {
+        throw new PreconditionFailedException('Campaign not found');
+      }
+      return campaign;
+    } catch (e) {
+      return {
+        message: e.message,
+      };
     }
-    return campaign;
   }
 
   async createCampaign(userId: string, data: CreateCampaignDto) {
