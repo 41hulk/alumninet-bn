@@ -21,5 +21,5 @@ export class CreateCampaignDto extends Dto<CreateCampaignDto> {
 
   @ApiProperty()
   @IsString()
-  targetAmount: string;
+  targetAmount: number;
 }
