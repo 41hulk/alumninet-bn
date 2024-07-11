@@ -22,6 +22,7 @@ model User {
   Reservation Reservation[]
   Event       Event[]
   Donation    Donation[]
+  Campaign    Campaign[]
 }
 
 model Event {
@@ -61,10 +62,12 @@ model Campaign {
   description   String
   startDate     DateTime
   endDate       DateTime
-  image         String
+  image         String?
   isPublished   Boolean    @default(true)
   targetAmount  Float
   currentAmount Float      @default(0)
+  userId        String
+  user          User       @relation(fields: [userId], references: [id])
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
   deleted_at    DateTime?
