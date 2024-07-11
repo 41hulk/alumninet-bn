@@ -12,6 +12,7 @@ import { EventsModule } from './events/events.module';
 import { EventsController } from './events/events.controller';
 import { EventsService } from './events/events.service';
 import { UsersModule } from './users/users.module';
+import { CampaignModule } from './campaign/campaign.module';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { UsersModule } from './users/users.module';
     EventsModule,
 
     UsersModule,
+
+    CampaignModule,
   ],
   controllers: [AppController, EventsController],
   providers: [AppService, JwtStrategy, PrismaService, EventsService],
