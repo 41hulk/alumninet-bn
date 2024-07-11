@@ -43,3 +43,4 @@ export class EventsController {
 }
 
 //TODO: Test role guard
+//TODO: a way to get one event by id

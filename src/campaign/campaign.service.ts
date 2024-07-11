@@ -7,13 +7,31 @@ export class CampaignService {
   constructor(private prisma: PrismaService) {}
 
   async getCampaigns() {
-    const campaigns = await this.prisma.campaign.findMany({
-      where: { deleted_at: null },
-      include: { user: true },
-      orderBy: { created_at: 'desc' },
-    });
-    return campaigns;
+    try {
+      const campaigns = await this.prisma.campaign.findMany({
+        where: { deleted_at: null },
+        include: { user: true },
+        orderBy: { created_at: 'desc' },
+      });
+      return campaigns;
+    } catch (e) {
+      return {
+        message: e.message,
+      };
+    }
   }
+
+  async getCampaignById(campaignId: string) {
+    const campaign = await this.prisma.campaign.findUnique({
+      where: { id: campaignId },
+      include: { user: true },
+    });
+    if (!campaign) {
+      throw new PreconditionFailedException('Campaign not found');
+    }
+    return campaign;
+  }
+
   async createCampaign(userId: string, data: CreateCampaignDto) {
     const { title, description, startDate, endDate, targetAmount } = data;
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
@@ -26,16 +44,22 @@ export class CampaignService {
     if (!user.isAdmin) {
       throw new PreconditionFailedException('User is not an admin');
     }
-    const newCampaign = await this.prisma.campaign.create({
-      data: {
-        title,
-        description,
-        startDate,
-        endDate,
-        targetAmount,
-        user: { connect: { id: userId } },
-      },
-    });
-    return newCampaign;
+    try {
+      const newCampaign = await this.prisma.campaign.create({
+        data: {
+          title,
+          description,
+          startDate,
+          endDate,
+          targetAmount,
+          user: { connect: { id: userId } },
+        },
+      });
+      return newCampaign;
+    } catch (e) {
+      return {
+        message: e.message,
+      };
+    }
   }
 }
