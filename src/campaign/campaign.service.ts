@@ -1,6 +1,8 @@
 import { Injectable, PreconditionFailedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateCampaignDto } from './dto/CreateCampaign.dto';
+import { ProfileDto } from 'src/auth/dto/profile.dto';
+import { AuthUserDto } from 'src/users/dto/AuthUser.dto';
 
 @Injectable()
 export class CampaignService {
@@ -69,3 +71,8 @@ export class CampaignService {
     }
   }
 }
+
+//TODO: Implement the donation service
+//TODO: Implement the donation payments services
+//TODO: Implement the donation payments
+//TODO: Create response interfaces for the services functions
