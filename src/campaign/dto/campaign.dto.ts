@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 import { ProfileDto } from 'src/auth/dto/profile.dto';
 import { Dto } from 'src/lib/dto/Dto';
-import { AuthUserDto } from 'src/users/dto/AuthUser.dto';
 
 export class CampaignDto extends Dto<CampaignDto> {
   @ApiProperty()
