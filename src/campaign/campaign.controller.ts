@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CampaignService } from './campaign.service';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateCampaignDto } from './dto/CreateCampaign.dto';
-import { ReqUser, ReqUserType } from 'src/auth/util/user.decorator';
+import { ReqUser, ReqUserType } from '../auth/util/user.decorator';
 
 @Controller('campaign')
 @ApiTags('Campaigns')

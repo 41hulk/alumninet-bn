@@ -57,7 +57,10 @@ export class EventsService {
         event: { connect: { id: eventId } },
         user: { connect: { id: userId } },
       },
-      include: { user: true, event: true },
+      include: {
+        user: true,
+        event: true,
+      },
     });
     if (!reservation) {
       throw new NotFoundException('Could not reserve the event');
@@ -86,7 +89,10 @@ export class EventsService {
         location,
         user: { connect: { id: userId } },
       },
-      include: { user: true, reservations: true },
+      include: {
+        user: true,
+        reservations: true,
+      },
     });
     if (!newEvent) {
       throw new NotFoundException('Could not create a new event');
