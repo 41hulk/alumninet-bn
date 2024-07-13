@@ -1,6 +1,8 @@
 import { Injectable, PreconditionFailedException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateCampaignDto } from './dto/CreateCampaign.dto';
+import { CampaignDto } from './dto/campaign.dto';
+import { ProfileDto } from 'src/auth/dto/profile.dto';
 
 @Injectable()
 export class CampaignService {
@@ -13,11 +15,24 @@ export class CampaignService {
         include: { user: true },
         orderBy: { created_at: 'desc' },
       });
-      return campaigns;
+      return campaigns.map((campaign) => {
+        return new CampaignDto({
+          id: campaign.id,
+          title: campaign.title,
+          description: campaign.description,
+          startDate: campaign.startDate,
+          endDate: campaign.endDate,
+          image: campaign.image,
+          targetAmount: campaign.targetAmount,
+          user: new ProfileDto({
+            id: campaign.user.id,
+            email: campaign.user.email,
+            username: campaign.user.username,
+          }),
+        });
+      });
     } catch (e) {
-      return {
-        message: e.message,
-      };
+      throw new Error(e.message);
     }
   }
 
@@ -30,11 +45,22 @@ export class CampaignService {
       if (!campaign) {
         throw new PreconditionFailedException('Campaign not found');
       }
-      return campaign;
+      return new CampaignDto({
+        id: campaign.id,
+        title: campaign.title,
+        description: campaign.description,
+        startDate: campaign.startDate,
+        endDate: campaign.endDate,
+        image: campaign.image,
+        targetAmount: campaign.targetAmount,
+        user: new ProfileDto({
+          id: campaign.user.id,
+          email: campaign.user.email,
+          username: campaign.user.username,
+        }),
+      });
     } catch (e) {
-      return {
-        message: e.message,
-      };
+      throw new Error(e.message);
     }
   }
 
@@ -63,9 +89,7 @@ export class CampaignService {
       });
       return newCampaign;
     } catch (e) {
-      return {
-        message: e.message,
-      };
+      throw new Error(e.message);
     }
   }
 }

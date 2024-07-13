@@ -4,6 +4,7 @@ import { CampaignService } from './campaign.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateCampaignDto } from './dto/CreateCampaign.dto';
 import { ReqUser, ReqUserType } from '../auth/util/user.decorator';
+import { CampaignDto } from './dto/campaign.dto';
 
 @Controller('campaign')
 @ApiTags('Campaigns')
@@ -13,7 +14,7 @@ export class CampaignController {
   @UseGuards(JwtAuthGuard)
   @Get('allCampaigns')
   @ApiBearerAuth()
-  async getCampaigns() {
+  async getCampaigns(): Promise<CampaignDto[]> {
     return this.campaignService.getCampaigns();
   }
 

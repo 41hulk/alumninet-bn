@@ -24,7 +24,7 @@ model User {
   Donation    Donation[]
   Campaign    Campaign[]
 }
-
+//TODO: add full_name to user
 model Event {
   id Int @id @default(autoincrement())
 

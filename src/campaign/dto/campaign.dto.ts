@@ -22,7 +22,11 @@ export class CampaignDto extends Dto<CampaignDto> {
 
   @ApiProperty()
   @IsNotEmpty()
-  endDate: string;
+  endDate: Date;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  image: string;
 
   @ApiProperty()
   @IsNotEmpty()
