@@ -17,7 +17,7 @@ export class CreateCampaignDto extends Dto<CreateCampaignDto> {
 
   @ApiProperty()
   @IsString()
-  endDate: string;
+  endDate: Date;
 
   @ApiProperty()
   @IsString()
