@@ -2,7 +2,7 @@ import { Injectable, PreconditionFailedException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateCampaignDto } from './dto/CreateCampaign.dto';
 import { CampaignDto } from './dto/campaign.dto';
-import { ProfileDto } from 'src/auth/dto/profile.dto';
+import { ProfileDto } from '../auth/dto/profile.dto';
 
 @Injectable()
 export class CampaignService {
