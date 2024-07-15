@@ -24,6 +24,7 @@ model User {
   Donation    Donation[]
   Campaign    Campaign[]
 }
+
 //TODO: add full_name to user
 model Event {
   id Int @id @default(autoincrement())
@@ -80,8 +81,9 @@ model Donation {
   userId     String
   campaignId String
 
-  amount    Float
-  createdAt DateTime @default(now())
+  amount     Float
+  createdAt  DateTime  @default(now())
+  deleted_at DateTime?
 
   user     User     @relation(fields: [userId], references: [id])
   campaign Campaign @relation(fields: [campaignId], references: [id])
