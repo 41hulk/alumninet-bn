@@ -19,7 +19,7 @@ export class CampaignController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('campaign/:id')
+  @Get(':id')
   @ApiBearerAuth()
   async getCampaignById(@Param('id') id: string) {
     return this.campaignService.getCampaignById(id);

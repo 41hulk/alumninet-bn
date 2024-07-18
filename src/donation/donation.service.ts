@@ -37,6 +37,8 @@ export class DonationService {
       throw new NotFoundException('Campaign not found');
     }
 
+    //TODO: implement momo integration here
+
     const donate = await this.prisma.donation.create({
       data: {
         user: { connect: { id: userId } },

@@ -35,6 +35,7 @@ export class EventsController {
     return this.eventsService.reserveEvent(user.id, reserveEventDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('all')
   @ApiBearerAuth()
   async getEvents(): Promise<EventDto[]> {
