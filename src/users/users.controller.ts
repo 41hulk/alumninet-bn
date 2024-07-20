@@ -31,7 +31,7 @@ export class UsersController {
     return this.userService.getUserById(user.id);
   }
 
-  @Put('updateUsername/:username')
+  @Put('userUpdate/:username')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async updateUser(

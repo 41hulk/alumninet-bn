@@ -18,6 +18,7 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
   app.enableCors();
   await app.listen(process.env.PORT);
+  console.log(`🚀 Server ready at: http://localhost:${process.env.PORT}`);
 }
 bootstrap();
 
