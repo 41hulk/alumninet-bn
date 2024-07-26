@@ -24,7 +24,12 @@ export class AuthService {
     };
   }
 
-  async register(email: string, pass: string, isAdmin: boolean) {
+  async register(
+    email: string,
+    pass: string,
+    isAdmin: boolean,
+    cellphone: string,
+  ) {
     const hashedPassword = await bcrypt.hash(pass, 10);
     const existingUser = await this.prisma.user.findUnique({
       where: { email: email },
@@ -39,6 +44,7 @@ export class AuthService {
         email,
         password: hashedPassword,
         isAdmin: isAdmin,
+        cellphone: cellphone,
       },
     });
     return await user;

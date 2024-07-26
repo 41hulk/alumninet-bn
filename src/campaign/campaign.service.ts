@@ -92,9 +92,9 @@ export class CampaignService {
       throw new Error(e.message);
     }
   }
-}
 
-//TODO: Implement the donation service
-//TODO: Implement the donation payments services
-//TODO: Implement the donation payments
-//TODO: Create response interfaces for the services functions
+  //TODO: Implement the donation service
+  //TODO: Implement the donation payments services
+  //TODO: Implement the donation payments
+  //TODO: Create response interfaces for the services functions
+}

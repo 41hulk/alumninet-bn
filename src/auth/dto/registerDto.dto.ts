@@ -14,4 +14,8 @@ export class RegisterDto extends Dto<RegisterDto> {
   @ApiProperty()
   @IsBoolean()
   isAdmin: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  cellphone: string;
 }
