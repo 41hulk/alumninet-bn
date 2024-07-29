@@ -39,8 +39,6 @@ export class DonationService {
       throw new NotFoundException('Campaign not found');
     }
 
-    //TODO: implement momo integration here
-
     try {
       await axios
         .post(
@@ -58,11 +56,16 @@ export class DonationService {
             },
           },
         )
-        .then((response) => {
+        .then(async (response) => {
+          //TODO: on UX create redirect opener for transaction
           console.log(response.data);
           //FIXME: Make sure that the donation is created after the webhook is successful
           //TODO: implement webhook and update campaign target amount
-          //
+          const flw_hook = await axios.post(
+            'https://webhook.site/460b3f85-b243-493c-b6d0-d6d6da588ed9',
+          );
+
+          console.log(flw_hook.data);
           if (response.data.status === 'success') {
             console.log('I am here');
             this.prisma.donation
@@ -76,6 +79,7 @@ export class DonationService {
               .then((response) => {
                 console.log('Donation Created', response);
               });
+            //TODO: I want to update target amount when use donates and disable donation when target amount is reached
           } else {
             throw new PreconditionFailedException('Transaction failed');
           }
@@ -115,4 +119,6 @@ export class DonationService {
     });
     return user;
   }
+
+  //TODO: create plans where a user can donate a fixed amount of money on schedule
 }

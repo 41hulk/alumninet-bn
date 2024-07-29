@@ -32,7 +32,7 @@ export class DonationController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('donate')
+  @Post('pay')
   @ApiBearerAuth()
   async donateToCampaign(
     @ReqUser() user: ReqUserType,

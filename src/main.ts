@@ -4,6 +4,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  //TODO: remove the comments at the end
+  // app.setGlobalPrefix('api/v1');
 
   app.enableCors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
