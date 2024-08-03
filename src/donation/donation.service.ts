@@ -21,6 +21,45 @@ export class DonationService {
     return donation;
   }
 
+  // async createDonation(userId: string, data: CreateDonationDto) {
+  //   const { campaignId, amount } = data;
+  //   const user = await this.prisma.user.findUnique({
+  //     where: { id: userId },
+  //   });
+  //   if (!userId) {
+  //     throw new PreconditionFailedException('Missing user id');
+  //   }
+  //   if (!user.isActive) {
+  //     throw new PreconditionFailedException('User is not active');
+  //   }
+  //   const campaign = await this.prisma.campaign.findUnique({
+  //     where: { id: campaignId },
+  //   });
+  //   if (!campaign) {
+  //     throw new NotFoundException('Campaign not found');
+  //   }
+
+  //   try {
+  //     await axios
+  //       .post(
+  //         `https://akokanya.com/mtn-pay?${amount}&${user.cellphone}&Khenz&${campaignId}`,
+  //       )
+  //       .then((response) => {
+  //         console.log(response.data);
+  //         // if (response.data.transactionId) {
+  //         //   const res = axios.get('https://akokanya.com/api/mtn-integration', {
+  //         //     params: {
+  //         //       transactionId: response.data.transactionId,
+  //         //     },
+  //         //   });
+
+  //         //   console.log(res);
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   async createDonation(userId: string, data: CreateDonationDto) {
     const { campaignId, amount } = data;
     const user = await this.prisma.user.findUnique({
@@ -56,16 +95,12 @@ export class DonationService {
             },
           },
         )
-        .then(async (response) => {
+        .then((response) => {
           //TODO: on UX create redirect opener for transaction
           console.log(response.data);
           //FIXME: Make sure that the donation is created after the webhook is successful
           //TODO: implement webhook and update campaign target amount
-          const flw_hook = await axios.post(
-            'https://webhook.site/460b3f85-b243-493c-b6d0-d6d6da588ed9',
-          );
 
-          console.log(flw_hook.data);
           if (response.data.status === 'success') {
             console.log('I am here');
             this.prisma.donation
