@@ -69,6 +69,35 @@ export class EventsService {
     return reservation;
   }
 
+  async cancelReservation(userId: string, reservationId: number) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!userId) {
+      throw new PreconditionFailedException('Missing user id');
+    }
+    if (!user.isActive) {
+      throw new PreconditionFailedException('User is not active');
+    }
+
+    return await this.prisma.reservation.update({
+      where: { id: reservationId },
+      data: { delete_at: new Date() },
+    });
+  }
+
+  async restoreReservation(userId: string, reservationId: number) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!userId) {
+      throw new PreconditionFailedException('Missing user id');
+    }
+    if (!user.isActive) {
+      throw new PreconditionFailedException('User is not active');
+    }
+    return await this.prisma.reservation.update({
+      where: { id: reservationId },
+      data: { delete_at: null },
+    });
+  }
+
   async createEvent(userId: string, data: CreateEventDto) {
     const { title, description, date, location } = data;
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
@@ -109,6 +138,53 @@ export class EventsService {
         email: newEvent.user.email,
         username: newEvent.user.username,
       }),
+    });
+  }
+
+  async deleteEvent(userId: string, eventId: number) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!userId) {
+      throw new PreconditionFailedException('Missing user id');
+    }
+    if (!user.isAdmin) {
+      throw new PreconditionFailedException('The user is not an admin');
+    }
+    return await this.prisma.event.update({
+      where: { id: eventId },
+      data: { delete_at: new Date() },
+    });
+  }
+
+  async restoreEvent(userId: string, eventId: number) {
+    if (!userId) {
+      throw new PreconditionFailedException('Missing user id');
+    }
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user.isAdmin) {
+      throw new PreconditionFailedException('The user is not an admin');
+    }
+    return await this.prisma.event.update({
+      where: { id: eventId },
+      data: { delete_at: null },
+    });
+  }
+
+  async permanentlyDeleteEvent(userId: string, eventId: number) {
+    if (!userId) {
+      throw new PreconditionFailedException('Missing user id');
+    }
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user.isAdmin) {
+      throw new PreconditionFailedException('The user is not an admin');
+    }
+    return await this.prisma.event.delete({
+      where: { id: eventId },
     });
   }
 }

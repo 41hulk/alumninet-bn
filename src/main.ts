@@ -26,3 +26,4 @@ async function bootstrap() {
 bootstrap();
 
 //TODO: deploy this to digital ocean
+//TODO: create analytics dashboard functionalities and generate reports
