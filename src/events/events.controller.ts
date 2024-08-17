@@ -91,7 +91,13 @@ export class EventsController {
     return await this.eventsService.getEvents();
   }
 
-  //FIXME: supposed to get integer got string
+  @UseGuards(JwtAuthGuard)
+  @Get('allReservation')
+  @ApiBearerAuth()
+  async getReservation(@ReqUser() user: ReqUserType) {
+    return await this.eventsService.getAllReservation(user.id);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   @ApiBearerAuth()

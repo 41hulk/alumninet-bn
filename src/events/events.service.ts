@@ -65,6 +65,24 @@ export class EventsService {
     });
   }
 
+  async getAllReservation(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!userId) {
+      throw new PreconditionFailedException('Missing user id');
+    }
+
+    if (!user.isActive) {
+      throw new PreconditionFailedException('User is not active');
+    }
+    const reservations = await this.prisma.reservation.findMany({
+      where: { delete_at: null },
+      include: { user: true, event: true },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return reservations;
+  }
+
   async reserveEvent(userId: string, data: ReserveEventDto) {
     const { eventId } = data;
     const user = await this.prisma.user.findUnique({ where: { id: userId } });

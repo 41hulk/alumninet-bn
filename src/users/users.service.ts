@@ -40,7 +40,7 @@ export class UsersService {
       return { message: 'No events found for you, RSVP to an event first' };
     }
 
-    return { data: events };
+    return events;
   }
 
   async getUserById(userId: string) {

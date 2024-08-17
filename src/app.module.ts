@@ -14,6 +14,7 @@ import { EventsService } from './events/events.service';
 import { UsersModule } from './users/users.module';
 import { CampaignModule } from './campaign/campaign.module';
 import { DonationModule } from './donation/donation.module';
+import { ReservationModule } from './reservation/reservation.module';
 
 @Module({
   imports: [
@@ -34,6 +35,8 @@ import { DonationModule } from './donation/donation.module';
     CampaignModule,
 
     DonationModule,
+
+    ReservationModule,
   ],
   controllers: [AppController, EventsController],
   providers: [AppService, JwtStrategy, PrismaService, EventsService],
