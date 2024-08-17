@@ -17,7 +17,6 @@ import { EventDto } from 'src/events/dto/event.dto';
 
 import { CreateEventDto } from './dto/createEventDto.dto';
 import { EventsService } from './events.service';
-import { ReserveEventDto } from './dto/reserveDto.dto';
 
 @Controller('events')
 @ApiTags('Events')
@@ -32,32 +31,6 @@ export class EventsController {
     @ReqUser() user: ReqUserType,
   ): Promise<EventDto> {
     return await this.eventsService.createEvent(user.id, createEventDto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('reserve')
-  @ApiBearerAuth()
-  async reserveEvent(
-    @Body() reserveEventDto: ReserveEventDto,
-    @ReqUser() user: ReqUserType,
-  ) {
-    return await this.eventsService.reserveEvent(user.id, reserveEventDto);
-  }
-
-  @Put('cancel/:id')
-  async cancelReservation(
-    @Param('id') eventId: string,
-    @ReqUser() user: ReqUserType,
-  ) {
-    return await this.eventsService.cancelReservation(user.id, eventId);
-  }
-
-  @Put('restoreReservation/:id')
-  async restoreReservation(
-    @Param('id') eventId: string,
-    @ReqUser() user: ReqUserType,
-  ) {
-    return await this.eventsService.restoreReservation(user.id, eventId);
   }
 
   @Put('delete/:id')
@@ -92,13 +65,6 @@ export class EventsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('allReservation')
-  @ApiBearerAuth()
-  async getReservation(@ReqUser() user: ReqUserType) {
-    return await this.eventsService.getAllReservation(user.id);
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Get('/:id')
   @ApiBearerAuth()
   async getOneEvent(
@@ -108,6 +74,3 @@ export class EventsController {
     return await this.eventsService.getOneEvent(user.id, eventId);
   }
 }
-
-//TODO: Test role guard
-//TODO: a way to get one event by id

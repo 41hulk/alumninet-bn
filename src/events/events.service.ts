@@ -8,7 +8,6 @@ import { EventDto } from '../events/dto/event.dto';
 import { ProfileDto } from '../auth/dto/profile.dto';
 import { PrismaService } from '../prisma.service';
 import { CreateEventDto } from './dto/createEventDto.dto';
-import { ReserveEventDto } from './dto/reserveDto.dto';
 
 @Injectable()
 export class EventsService {
@@ -62,85 +61,6 @@ export class EventsService {
         email: events.user.email,
         username: events.user.username,
       }),
-    });
-  }
-
-  async getAllReservation(userId: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!userId) {
-      throw new PreconditionFailedException('Missing user id');
-    }
-
-    if (!user.isActive) {
-      throw new PreconditionFailedException('User is not active');
-    }
-    const reservations = await this.prisma.reservation.findMany({
-      where: { delete_at: null },
-      include: { user: true, event: true },
-      orderBy: { createdAt: 'desc' },
-    });
-
-    return reservations;
-  }
-
-  async reserveEvent(userId: string, data: ReserveEventDto) {
-    const { eventId } = data;
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!userId) {
-      throw new PreconditionFailedException('Missing user id');
-    }
-    if (!user.isActive) {
-      throw new PreconditionFailedException('User is not active');
-    }
-    const event = await this.prisma.event.findUnique({
-      where: { id: eventId },
-    });
-    if (!event) {
-      throw new NotFoundException('Event not found');
-    }
-    const reservation = await this.prisma.reservation.create({
-      data: {
-        event: { connect: { id: eventId } },
-        user: { connect: { id: userId } },
-      },
-      include: {
-        user: true,
-        event: true,
-      },
-    });
-    if (!reservation) {
-      throw new NotFoundException('Could not reserve the event');
-    }
-
-    return reservation;
-  }
-
-  async cancelReservation(userId: string, reservationId: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!userId) {
-      throw new PreconditionFailedException('Missing user id');
-    }
-    if (!user.isActive) {
-      throw new PreconditionFailedException('User is not active');
-    }
-
-    return await this.prisma.reservation.update({
-      where: { id: reservationId },
-      data: { delete_at: new Date() },
-    });
-  }
-
-  async restoreReservation(userId: string, reservationId: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!userId) {
-      throw new PreconditionFailedException('Missing user id');
-    }
-    if (!user.isActive) {
-      throw new PreconditionFailedException('User is not active');
-    }
-    return await this.prisma.reservation.update({
-      where: { id: reservationId },
-      data: { delete_at: null },
     });
   }
 
@@ -234,7 +154,3 @@ export class EventsService {
     });
   }
 }
-
-//TODO: Create a way to update and delete events
-//TODO: Create a way to cancel reservations
-//TODO: create a way to soft delete everything
