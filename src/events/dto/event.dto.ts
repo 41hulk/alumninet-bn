@@ -5,7 +5,7 @@ import { ProfileDto } from '../../auth/dto/profile.dto';
 export class EventDto extends Dto<EventDto> {
   @ApiProperty()
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @ApiProperty()
   @IsNotEmpty()

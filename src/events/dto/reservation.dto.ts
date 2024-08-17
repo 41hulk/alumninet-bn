@@ -7,7 +7,7 @@ import { Dto } from '../../lib/dto/Dto';
 export class ReservationDto extends Dto<ReservationDto> {
   @ApiProperty()
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @ApiProperty()
   @IsNotEmpty()

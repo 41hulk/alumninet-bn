@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -22,7 +31,7 @@ export class EventsController {
     @Body() createEventDto: CreateEventDto,
     @ReqUser() user: ReqUserType,
   ): Promise<EventDto> {
-    return this.eventsService.createEvent(user.id, createEventDto);
+    return await this.eventsService.createEvent(user.id, createEventDto);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -32,14 +41,65 @@ export class EventsController {
     @Body() reserveEventDto: ReserveEventDto,
     @ReqUser() user: ReqUserType,
   ) {
-    return this.eventsService.reserveEvent(user.id, reserveEventDto);
+    return await this.eventsService.reserveEvent(user.id, reserveEventDto);
+  }
+
+  @Put('cancel/:id')
+  async cancelReservation(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.cancelReservation(user.id, eventId);
+  }
+
+  @Put('restoreReservation/:id')
+  async restoreReservation(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.restoreReservation(user.id, eventId);
+  }
+
+  @Put('delete/:id')
+  async deleteEvent(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.deleteEvent(user.id, eventId);
+  }
+
+  @Put('restoreEvent/:id')
+  async restoreEvent(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.restoreEvent(user.id, eventId);
+  }
+
+  @Delete('permDelete/:id')
+  async permanentlyDeleteEvent(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.permanentlyDeleteEvent(user.id, eventId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('all')
   @ApiBearerAuth()
   async getEvents(): Promise<EventDto[]> {
-    return this.eventsService.getEvents();
+    return await this.eventsService.getEvents();
+  }
+
+  //FIXME: supposed to get integer got string
+  @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  @ApiBearerAuth()
+  async getOneEvent(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.getOneEvent(user.id, eventId);
   }
 }
 

@@ -28,7 +28,7 @@ model User {
 
 //TODO: add full_name to user
 model Event {
-  id Int @id @default(autoincrement())
+  id String @id @default(cuid())
 
   userId      String
   avatar      String?
@@ -40,22 +40,22 @@ model Event {
   user User @relation(fields: [userId], references: [id])
 
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime? @updatedAt
   delete_at DateTime?
 
   reservations Reservation[]
 }
 
 model Reservation {
-  id      Int    @id @default(autoincrement())
+  id      String @id @default(cuid())
   userId  String
-  eventId Int
+  eventId String
 
   event Event @relation(fields: [eventId], references: [id])
   user  User  @relation(fields: [userId], references: [id])
 
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime? @updatedAt
   delete_at DateTime?
 }
 
@@ -72,7 +72,7 @@ model Campaign {
   userId        String
   user          User       @relation(fields: [userId], references: [id])
   created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
+  updated_at    DateTime?  @updatedAt
   deleted_at    DateTime?
   donations     Donation[]
 }

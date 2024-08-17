@@ -6,5 +6,5 @@ export class ReserveEventDto extends Dto<ReserveEventDto> {
   @IsInt()
   @ApiProperty()
   @IsNotEmpty()
-  eventId: number;
+  eventId: string;
 }

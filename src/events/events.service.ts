@@ -17,7 +17,7 @@ export class EventsService {
   async getEvents() {
     const events = await this.prisma.event.findMany({
       where: { delete_at: null },
-      include: { user: true, reservations: true },
+      include: { user: true },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -34,6 +34,34 @@ export class EventsService {
           username: event.user.username,
         }),
       });
+    });
+  }
+
+  async getOneEvent(userId: string, eventId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!userId) {
+      throw new PreconditionFailedException('Missing user id');
+    }
+
+    if (!user.isActive) {
+      throw new PreconditionFailedException('User is not active');
+    }
+    const events = await this.prisma.event.findUnique({
+      where: { id: eventId, delete_at: null },
+      include: { user: true, reservations: true },
+    });
+
+    return new EventDto({
+      id: events.id,
+      title: events.title,
+      description: events.description,
+      date: events.date,
+      location: events.location,
+      user: new ProfileDto({
+        id: events.user.id,
+        email: events.user.email,
+        username: events.user.username,
+      }),
     });
   }
 
@@ -69,7 +97,7 @@ export class EventsService {
     return reservation;
   }
 
-  async cancelReservation(userId: string, reservationId: number) {
+  async cancelReservation(userId: string, reservationId: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!userId) {
       throw new PreconditionFailedException('Missing user id');
@@ -84,7 +112,7 @@ export class EventsService {
     });
   }
 
-  async restoreReservation(userId: string, reservationId: number) {
+  async restoreReservation(userId: string, reservationId: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!userId) {
       throw new PreconditionFailedException('Missing user id');
@@ -141,7 +169,7 @@ export class EventsService {
     });
   }
 
-  async deleteEvent(userId: string, eventId: number) {
+  async deleteEvent(userId: string, eventId: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!userId) {
       throw new PreconditionFailedException('Missing user id');
@@ -155,7 +183,7 @@ export class EventsService {
     });
   }
 
-  async restoreEvent(userId: string, eventId: number) {
+  async restoreEvent(userId: string, eventId: string) {
     if (!userId) {
       throw new PreconditionFailedException('Missing user id');
     }
@@ -172,7 +200,7 @@ export class EventsService {
     });
   }
 
-  async permanentlyDeleteEvent(userId: string, eventId: number) {
+  async permanentlyDeleteEvent(userId: string, eventId: string) {
     if (!userId) {
       throw new PreconditionFailedException('Missing user id');
     }
