@@ -27,23 +27,6 @@ export class ReservationController {
   ) {
     return await this.reservationService.reserveEvent(user.id, reserveEventDto);
   }
-
-  @Put('cancel/:id')
-  async cancelReservation(
-    @Param('id') eventId: string,
-    @ReqUser() user: ReqUserType,
-  ) {
-    return await this.reservationService.cancelReservation(user.id, eventId);
-  }
-
-  @Put('restore/:id')
-  async restoreReservation(
-    @Param('id') eventId: string,
-    @ReqUser() user: ReqUserType,
-  ) {
-    return await this.reservationService.restoreReservation(user.id, eventId);
-  }
-
   @UseGuards(JwtAuthGuard)
   @Get('allReservation')
   @ApiBearerAuth()
@@ -56,5 +39,28 @@ export class ReservationController {
   @ApiBearerAuth()
   async getAllUserReservations(@ReqUser() user: ReqUserType) {
     return this.reservationService.getAllReservationByUser(user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('cancel/:id')
+  @ApiBearerAuth()
+  async cancelReservation(
+    @Param('id') reservationId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.reservationService.cancelReservation(
+      user.id,
+      reservationId,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('restore/:id')
+  @ApiBearerAuth()
+  async restoreReservation(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.reservationService.restoreReservation(user.id, eventId);
   }
 }
