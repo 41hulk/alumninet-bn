@@ -36,6 +36,39 @@ export class EventsService {
     });
   }
 
+  async searchEvents(search: string) {
+    try {
+      const events = await this.prisma.event.findMany({
+        where: {
+          OR: [
+            { title: { contains: search } },
+            { description: { contains: search } },
+          ],
+          AND: [{ delete_at: { equals: null } }],
+        },
+        include: { user: true },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      return events.map((event) => {
+        return new EventDto({
+          id: event.id,
+          title: event.title,
+          description: event.description,
+          date: event.date,
+          location: event.location,
+          user: new ProfileDto({
+            id: event.user.id,
+            email: event.user.email,
+            username: event.user.username,
+          }),
+        });
+      });
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  }
+
   async getOneEvent(userId: string, eventId: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!userId) {

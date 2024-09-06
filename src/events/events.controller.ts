@@ -33,6 +33,13 @@ export class EventsController {
     return await this.eventsService.createEvent(user.id, createEventDto);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post(':query')
+  @ApiBearerAuth()
+  async searchEvent(@Param('query') query: string) {
+    return await this.eventsService.searchEvents(query);
+  }
+
   @Put('delete/:id')
   async deleteEvent(
     @Param('id') eventId: string,

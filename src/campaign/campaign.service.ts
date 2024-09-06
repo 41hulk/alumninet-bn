@@ -8,6 +8,46 @@ import { ProfileDto } from '../auth/dto/profile.dto';
 export class CampaignService {
   constructor(private prisma: PrismaService) {}
 
+  async searchCampaigns(search: string) {
+    try {
+      const campaigns = await this.prisma.campaign.findMany({
+        where: {
+          OR: [
+            { title: { contains: search } },
+            { description: { contains: search } },
+          ],
+          AND: [
+            {
+              deleted_at: {
+                equals: null,
+              },
+            },
+          ],
+        },
+        include: { user: true },
+        orderBy: { created_at: 'desc' },
+      });
+      return campaigns.map((campaign) => {
+        return new CampaignDto({
+          id: campaign.id,
+          title: campaign.title,
+          description: campaign.description,
+          startDate: campaign.startDate,
+          endDate: campaign.endDate,
+          image: campaign.image,
+          targetAmount: campaign.targetAmount,
+          user: new ProfileDto({
+            id: campaign.user.id,
+            email: campaign.user.email,
+            username: campaign.user.username,
+          }),
+        });
+      });
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  }
+
   async getCampaigns() {
     try {
       const campaigns = await this.prisma.campaign.findMany({

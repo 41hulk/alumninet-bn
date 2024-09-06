@@ -26,6 +26,13 @@ export class CampaignController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post(':query')
+  @ApiBearerAuth()
+  async searchCampaigns(@Param('query') query: string) {
+    return this.campaignService.searchCampaigns(query);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('createCampaign')
   @ApiBearerAuth()
   async createCampaign(
