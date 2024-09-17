@@ -82,23 +82,22 @@ export class CampaignService {
         where: { id: campaignId },
         include: { user: true },
       });
-      if (!campaign) {
-        throw new PreconditionFailedException('Campaign not found');
+      if (campaign) {
+        return new CampaignDto({
+          id: campaign.id,
+          title: campaign.title,
+          description: campaign.description,
+          startDate: campaign.startDate,
+          endDate: campaign.endDate,
+          image: campaign.image,
+          targetAmount: campaign.targetAmount,
+          user: new ProfileDto({
+            id: campaign.user.id,
+            email: campaign.user.email,
+            username: campaign.user.username,
+          }),
+        });
       }
-      return new CampaignDto({
-        id: campaign.id,
-        title: campaign.title,
-        description: campaign.description,
-        startDate: campaign.startDate,
-        endDate: campaign.endDate,
-        image: campaign.image,
-        targetAmount: campaign.targetAmount,
-        user: new ProfileDto({
-          id: campaign.user.id,
-          email: campaign.user.email,
-          username: campaign.user.username,
-        }),
-      });
     } catch (e) {
       throw new Error(e.message);
     }
