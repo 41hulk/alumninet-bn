@@ -1,0 +1,41 @@
+title: DonationService Sequence Diagram
+
+participant User
+participant DonationService
+participant PrismaService
+participant FlutterwaveAPI
+participant AxiosAPI
+
+User ->> DonationService: getDonations()
+note over DonationService: Fetch all active donations
+DonationService ->> PrismaService: findMany({ where: { deleted_at: null } })
+PrismaService ->> DonationService: Return list of donations
+DonationService ->> User: Return donations
+
+User ->> DonationService: createDonation(userId, CreateDonationDto)
+note over DonationService: Validate user and campaign
+DonationService ->> PrismaService: findUnique({ where: { id: userId } })
+PrismaService ->> DonationService: Return user
+DonationService ->> PrismaService: findUnique({ where: { id: campaignId } })
+PrismaService ->> DonationService: Return campaign
+
+note over DonationService, AxiosAPI: Call external Flutterwave API for payment
+DonationService ->> AxiosAPI: post('/v3/charges?type=mobile_money_rwanda', payment details)
+AxiosAPI ->> DonationService: Return transaction result
+note over DonationService: Check payment success
+DonationService ->> PrismaService: create({ data: donation details })
+PrismaService ->> DonationService: Return created donation
+DonationService ->> User: Return donation confirmation
+
+User ->> DonationService: getTransactionVerification(transactionId)
+note over DonationService: Verify transaction through Flutterwave
+DonationService ->> FlutterwaveAPI: Transaction.verify({ id: transactionId })
+FlutterwaveAPI ->> DonationService: Return transaction status
+note over DonationService: Validate success and currency
+DonationService ->> User: Return verification status
+
+User ->> DonationService: getDonationByUserId(userId)
+note over DonationService: Fetch donations for a specific user
+DonationService ->> PrismaService: findUnique({ where: { id: userId }, include: { Donation: true } })
+PrismaService ->> DonationService: Return user with donations
+DonationService ->> User: Return user donations

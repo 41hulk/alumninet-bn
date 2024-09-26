@@ -1,0 +1,60 @@
+title: events sequence
+
+participant User
+participant EventsService
+participant PrismaService
+
+User ->> EventsService: getEvents()
+note over EventsService, PrismaService: Fetch all events not deleted
+EventsService ->> PrismaService: findMany({ where: { delete_at: null }, include: { user: true } })
+PrismaService ->> EventsService: Return list of events
+EventsService ->> User: Map and return EventDto
+
+User ->> EventsService: searchEvents(search)
+note over EventsService: Search for events based on title or description
+EventsService ->> PrismaService: findMany({ OR: [{ title, description }] })
+PrismaService ->> EventsService: Return matching events
+EventsService ->> User: Map and return EventDto
+
+User ->> EventsService: getOneEvent(userId, eventId)
+note over EventsService: Fetch a specific event by ID
+EventsService ->> PrismaService: findUnique({ where: { id: eventId, delete_at: null } })
+PrismaService ->> EventsService: Return event
+note over EventsService: Validate user id and user status
+EventsService ->> PrismaService: findUnique({ where: { id: userId } })
+PrismaService ->> EventsService: Return user object
+note over EventsService: If user is inactive, throw PreconditionFailedException
+EventsService ->> User: Return EventDto
+
+User ->> EventsService: createEvent(userId, CreateEventDto)
+note over EventsService: Validate user id, status, and admin rights
+EventsService ->> PrismaService: findUnique({ where: { id: userId } })
+PrismaService ->> EventsService: Return user object
+note over EventsService: If user is not admin, throw PreconditionFailedException
+EventsService ->> PrismaService: create({ data: { title, description, date, location, user } })
+PrismaService ->> EventsService: Return created event
+EventsService ->> User: Return EventDto
+
+User ->> EventsService: deleteEvent(userId, eventId)
+note over EventsService: Validate user admin rights
+EventsService ->> PrismaService: findUnique({ where: { id: userId } })
+PrismaService ->> EventsService: Return user object
+note over EventsService: If user is not admin, throw PreconditionFailedException
+EventsService ->> PrismaService: update({ where: { id: eventId }, data: { delete_at: new Date() } })
+PrismaService ->> EventsService: Return updated event
+
+User ->> EventsService: restoreEvent(userId, eventId)
+note over EventsService: Validate user admin rights
+EventsService ->> PrismaService: findUnique({ where: { id: userId } })
+PrismaService ->> EventsService: Return user object
+note over EventsService: Restore deleted event
+EventsService ->> PrismaService: update({ where: { id: eventId }, data: { delete_at: null } })
+PrismaService ->> EventsService: Return restored event
+
+User ->> EventsService: permanentlyDeleteEvent(userId, eventId)
+note over EventsService: Validate user admin rights
+EventsService ->> PrismaService: findUnique({ where: { id: userId } })
+PrismaService ->> EventsService: Return user object
+note over EventsService: Permanently delete event
+EventsService ->> PrismaService: delete({ where: { id: eventId } })
+PrismaService ->> EventsService: Return confirmation of deletion

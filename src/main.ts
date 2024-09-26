@@ -1,9 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import APIToolkit from 'apitoolkit-express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const apiToolkitClient = APIToolkit.NewClient({
+    apiKey: process.env.TRACK_API_KEY,
+    debug: false,
+    tags: ['environment: production', 'region: us-east-1'],
+    serviceVersion: 'v2.0',
+  });
+  app.use(apiToolkitClient.expressMiddleware);
   //TODO: remove the comments at the end
   // app.setGlobalPrefix('api/v1');
 
@@ -11,6 +19,7 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: 'Content-Type,Authorization',
   });
+
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Alumni Network API')

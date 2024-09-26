@@ -1,0 +1,29 @@
+title: Users Sequence
+
+participant User
+participant UsersService
+participant PrismaService
+
+User ->> UsersService: getAllUsers()
+note over UsersService, PrismaService: Fetch all users not deleted
+UsersService ->> PrismaService: findMany({ where: { deleted_at: null }, include: { Reservation: true } })
+PrismaService ->> UsersService: Return list of users
+UsersService ->> User: Return users
+
+User ->> UsersService: getUserById(userId)
+note over UsersService: Fetch user by ID
+UsersService ->> PrismaService: findUnique({ where: { id: userId, deleted_at: null } })
+PrismaService ->> UsersService: Return user / null
+note over UsersService: Check if user exists
+UsersService ->> User: Throw NotFoundException / Return AuthUserDto
+
+User ->> UsersService: updateUsername(userId, username)
+note over UsersService: Validate username format
+UsersService ->> UsersService: Validate /^[a-zA-Z0-9_.-]*$/
+note over UsersService: Check if username is already taken
+UsersService ->> PrismaService: findFirst({ where: { username: username } })
+PrismaService ->> UsersService: Return existing username / null
+note over UsersService: If username exists, throw ConflictException
+UsersService ->> PrismaService: update({ where: { id: userId }, data: { username: username } })
+PrismaService ->> UsersService: Return updated user
+UsersService ->> User: Return AuthUserDto

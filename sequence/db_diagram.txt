@@ -1,0 +1,72 @@
+Table users {
+  id          String     
+  email       String     
+  password    String
+  cellphone   String
+  username    String
+  avatar      String
+  profession  String
+  bio         String
+  isAdmin     Boolean    
+  isActive    Boolean  
+  createdAt   DateTime 
+  deleted_at  DateTime
+}
+
+Table events {
+  id          String     
+  userId      String
+  avatar      String
+  title       String
+  description String
+  date        DateTime
+  location    String
+  createdAt   DateTime   
+  updatedAt   DateTime  
+  delete_at   DateTime
+}
+
+Ref: events.userId > users.id
+
+Table reservations {
+  id          String     
+  userId      String
+  eventId     String
+  createdAt   DateTime  
+  updatedAt   DateTime 
+  delete_at   DateTime
+}
+
+Ref: reservations.eventId > events.id
+Ref: reservations.userId > users.id
+
+Table campaigns {
+  id            String     
+  title         String
+  description   String
+  startDate     DateTime
+  endDate       DateTime
+  image         String
+  isPublished    Boolean
+  targetAmount  Float
+  currentAmount Float
+  userId        String
+  created_at    DateTime    
+  updated_at    DateTime
+  deleted_at    DateTime
+}
+
+Ref: campaigns.userId > users.id
+
+
+Table donations {
+  id          String
+  userId      String
+  campaignId  String
+  amount      Float
+  createdAt   DateTime
+  deleted_at  DateTime?
+}
+
+Ref: donations.userId > users.id
+Ref: donations.campaignId > campaigns.id
