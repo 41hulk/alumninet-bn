@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -8,7 +17,6 @@ import { EventDto } from 'src/events/dto/event.dto';
 
 import { CreateEventDto } from './dto/createEventDto.dto';
 import { EventsService } from './events.service';
-import { ReserveEventDto } from './dto/reserveDto.dto';
 
 @Controller('events')
 @ApiTags('Events')
@@ -22,24 +30,54 @@ export class EventsController {
     @Body() createEventDto: CreateEventDto,
     @ReqUser() user: ReqUserType,
   ): Promise<EventDto> {
-    return this.eventsService.createEvent(user.id, createEventDto);
+    return await this.eventsService.createEvent(user.id, createEventDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('reserve')
+  @Post(':query')
   @ApiBearerAuth()
-  async reserveEvent(
-    @Body() reserveEventDto: ReserveEventDto,
-    @ReqUser() user: ReqUserType,
-  ) {
-    return this.eventsService.reserveEvent(user.id, reserveEventDto);
+  async searchEvent(@Param('query') query: string) {
+    return await this.eventsService.searchEvents(query);
   }
 
+  @Put('delete/:id')
+  async deleteEvent(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.deleteEvent(user.id, eventId);
+  }
+
+  @Put('restoreEvent/:id')
+  async restoreEvent(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.restoreEvent(user.id, eventId);
+  }
+
+  @Delete('permDelete/:id')
+  async permanentlyDeleteEvent(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.permanentlyDeleteEvent(user.id, eventId);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('all')
   @ApiBearerAuth()
   async getEvents(): Promise<EventDto[]> {
-    return this.eventsService.getEvents();
+    return await this.eventsService.getEvents();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  @ApiBearerAuth()
+  async getOneEvent(
+    @Param('id') eventId: string,
+    @ReqUser() user: ReqUserType,
+  ) {
+    return await this.eventsService.getOneEvent(user.id, eventId);
   }
 }
-
-//TODO: Test role guard

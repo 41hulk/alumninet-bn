@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { Dto } from '../../lib/dto/Dto';
 import { ProfileDto } from '../../auth/dto/profile.dto';
-export class EventDto extends Dto<EventDto> {
+import { Dto } from '../../lib/dto/Dto';
+
+export class CampaignDto extends Dto<CampaignDto> {
   @ApiProperty()
   @IsNotEmpty()
   id: string;
@@ -17,11 +18,19 @@ export class EventDto extends Dto<EventDto> {
 
   @ApiProperty()
   @IsNotEmpty()
-  date: Date;
+  startDate: Date;
 
   @ApiProperty()
   @IsNotEmpty()
-  location: string;
+  endDate: Date;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  image: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  targetAmount: number;
 
   @ApiProperty()
   @IsNotEmpty()

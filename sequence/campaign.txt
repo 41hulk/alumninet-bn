@@ -1,0 +1,33 @@
+title: CampaignService Sequence Diagram
+
+participant User
+participant CampaignService
+participant PrismaService
+
+User ->> CampaignService: searchCampaigns(search)
+note over CampaignService: Search for campaigns by title or description
+CampaignService ->> PrismaService: findMany({ OR: [{ title, description }], AND: [{ deleted_at: null }] })
+PrismaService ->> CampaignService: Return matching campaigns
+CampaignService ->> User: Map and return CampaignDto
+
+User ->> CampaignService: getCampaigns()
+note over CampaignService, PrismaService: Fetch all active campaigns
+CampaignService ->> PrismaService: findMany({ where: { deleted_at: null } })
+PrismaService ->> CampaignService: Return list of campaigns
+CampaignService ->> User: Map and return CampaignDto
+
+User ->> CampaignService: getCampaignById(campaignId)
+note over CampaignService: Fetch a specific campaign by ID
+CampaignService ->> PrismaService: findUnique({ where: { id: campaignId } })
+PrismaService ->> CampaignService: Return campaign
+CampaignService ->> User: Map and return CampaignDto
+
+User ->> CampaignService: createCampaign(userId, CreateCampaignDto)
+note over CampaignService: Validate user id, status, and admin rights
+CampaignService ->> PrismaService: findUnique({ where: { id: userId } })
+PrismaService ->> CampaignService: Return user object
+note over CampaignService: If user is inactive or not admin, throw PreconditionFailedException
+CampaignService ->> PrismaService: create({ data: { title, description, startDate, endDate, targetAmount, user } })
+PrismaService ->> CampaignService: Return new campaign
+CampaignService ->> User: Return created campaign
+

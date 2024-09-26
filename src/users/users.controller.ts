@@ -10,13 +10,6 @@ import { AuthUserDto } from './dto/AuthUser.dto';
 export class UsersController {
   constructor(private userService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Get('getAllUserReservations')
-  @ApiBearerAuth()
-  async getAllUserReservations(@ReqUser() user: ReqUserType) {
-    return this.userService.getAllReservationByUser(user.id);
-  }
-
   @Get('getAllUsers')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -31,7 +24,7 @@ export class UsersController {
     return this.userService.getUserById(user.id);
   }
 
-  @Put('updateUsername/:username')
+  @Put('userUpdate/:username')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async updateUser(

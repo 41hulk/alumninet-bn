@@ -1,0 +1,37 @@
+title: Authentication sequence
+
+participant User
+participant AuthService
+participant PrismaService
+participant Bcrypt
+participant JwtService
+
+User ->> AuthService: validateUser(email, password)
+note over AuthService, User: Checking if user exists
+AuthService ->> PrismaService: findUnique({ where: { email } })
+PrismaService ->> AuthService: Return user object
+note over AuthService, PrismaService: Verify user credentials
+AuthService ->> Bcrypt: compare(password, user.password)
+Bcrypt ->> AuthService: Return result (true/false)
+note over AuthService, User: Return user data if valid
+AuthService ->> User: Return user data / null
+
+User ->> AuthService: login(user)
+note over AuthService: Create JWT token
+AuthService ->> JwtService: sign(payload)
+JwtService ->> AuthService: Return JWT token
+AuthService ->> User: Return { message, data, access_token }
+
+User ->> AuthService: register(email, password, isAdmin, cellphone)
+note over AuthService: Hash the password
+AuthService ->> Bcrypt: hash(password, 10)
+Bcrypt ->> AuthService: Return hashed password
+note over AuthService: Check if user already exists
+AuthService ->> PrismaService: findUnique({ where: { email } })
+PrismaService ->> AuthService: Return existing user or null
+note over AuthService: If user exists, throw ConflictException
+AuthService ->> PrismaService: create({ email, password, isAdmin, cellphone })
+PrismaService ->> AuthService: Return created user
+AuthService ->> User: Return created user
+
+

@@ -19,30 +19,6 @@ export class UsersService {
     return users;
   }
 
-  async getAllReservationByUser(userId: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId, deleted_at: null },
-      include: { Reservation: true },
-    });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const reservation = user.Reservation;
-
-    const events = await this.prisma.event.findMany({
-      where: {
-        id: { in: reservation.map((reservation) => reservation.eventId) },
-      },
-    });
-
-    if (events.length === 0) {
-      return { message: 'No events found for you, RSVP to an event first' };
-    }
-
-    return { data: events };
-  }
-
   async getUserById(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId, deleted_at: null },

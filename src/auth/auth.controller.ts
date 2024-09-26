@@ -29,8 +29,8 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: RegisterDto) {
-    const { email, password, isAdmin } = body;
-    return this.authService.register(email, password, isAdmin);
+    const { email, password, isAdmin, cellphone } = body;
+    return this.authService.register(email, password, isAdmin, cellphone);
   }
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

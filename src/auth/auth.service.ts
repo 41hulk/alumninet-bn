@@ -19,12 +19,18 @@ export class AuthService {
   async login(user: any) {
     const payload = { email: user.email, sub: user.id, role: user.role };
     return {
+      message: 'login successful',
       data: user,
       access_token: await this.jwtService.sign(payload),
     };
   }
 
-  async register(email: string, pass: string, isAdmin: boolean) {
+  async register(
+    email: string,
+    pass: string,
+    isAdmin: boolean,
+    cellphone: string,
+  ) {
     const hashedPassword = await bcrypt.hash(pass, 10);
     const existingUser = await this.prisma.user.findUnique({
       where: { email: email },
@@ -39,6 +45,7 @@ export class AuthService {
         email,
         password: hashedPassword,
         isAdmin: isAdmin,
+        cellphone: cellphone,
       },
     });
     return await user;

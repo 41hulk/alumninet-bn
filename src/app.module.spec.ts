@@ -12,6 +12,8 @@ import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { AuthService } from './auth/auth.service';
 import { UsersService } from './users/users.service';
+import { CampaignModule } from './campaign/campaign.module';
+import { CampaignService } from './campaign/campaign.service';
 
 describe('AppModule', () => {
   let appModule: TestingModule;
@@ -28,6 +30,7 @@ describe('AppModule', () => {
         EventsModule,
         UsersModule,
         UsersModule,
+        CampaignModule,
       ],
       controllers: [AppController],
       providers: [
@@ -38,6 +41,7 @@ describe('AppModule', () => {
         UsersService,
         JwtService,
         AuthService,
+        CampaignService,
       ],
     }).compile();
 
